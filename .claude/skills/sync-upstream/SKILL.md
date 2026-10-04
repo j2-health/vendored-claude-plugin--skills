@@ -32,7 +32,7 @@ This repo is J2's fork of [mattpocock/skills](https://github.com/mattpocock/skil
    git checkout -b "j2/sync-$TAG" main
    git merge --no-ff "$TAG" -m "Merge upstream $TAG"
    ```
-5. **Conflicts** land only in patched skills (their `SKILL.md` frontmatter or `agents/openai.yaml`). Resolve by taking upstream's version of the file, then re-applying the patch from `J2-PATCHES.md`: drop the invocation flags, restore the J2 description — adjusted if upstream changed what the skill does. Call the Skill tool with `resolving-merge-conflicts` for anything bigger.
+5. **Conflicts** land only in patched skills (their `SKILL.md` frontmatter or `agents/openai.yaml`). Resolve by taking upstream's version of the file, then re-applying the patch from `J2-PATCHES.md`: drop the invocation flags, restore the J2 description — adjusted if upstream changed what the skill does.
 6. **Verify.**
    ```sh
    bash scripts/j2-check-patches.sh
