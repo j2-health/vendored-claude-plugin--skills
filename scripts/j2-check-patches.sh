@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Fails if a skill J2 patched to be model-invoked (see J2-PATCHES.md) has
-# regained upstream's user-invoked flags — typically after an upstream sync.
+# regained upstream's user-invoked flags, typically after an upstream sync.
 set -eu
 
 cd "$(dirname "$0")/.."
@@ -23,7 +23,7 @@ for name in $PATCHED; do
     echo "FAIL $name: $dir/agents/openai.yaml sets allow_implicit_invocation: false"
     fail=1
   fi
-  if ! grep -q '^description: Use when' "$dir/SKILL.md"; then
+  if ! grep -Eq '^description: "?Use when' "$dir/SKILL.md"; then
     echo "FAIL $name: $dir/SKILL.md description is not model-facing (expected 'Use when…')"
     fail=1
   fi
