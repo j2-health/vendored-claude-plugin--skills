@@ -41,7 +41,16 @@ This repo is J2's fork of [mattpocock/skills](https://github.com/mattpocock/skil
    ```
    Expect exactly one warning, upstream's own: "CLAUDE.md at the plugin root is not loaded". It fails `--strict` on pristine upstream too, so don't use `--strict` here.
 7. **PR to this fork's `main`** with the step-3 summary. Merge it with **"Create a merge commit"**: squash or rebase-merge would cut the fork off from upstream's history and turn every future sync into a full-file conflict.
-8. **Bump the pin** in `~/workspace/claude-plugins` (`j2-health/claude-plugins`): in `.claude-plugin/marketplace.json`, the `mattpocock-skills` entry's `source.sha` → the merge commit on this fork's `main` (full 40 hex), and `version` → `${TAG#v}`, **together**. Open that PR; its CI (`scripts/validate_manifests.py`) checks the shape.
+8. **Check the merge kept upstream's history**, since GitHub's default merge button may be squash:
+   ```sh
+   git fetch origin && git merge-base --is-ancestor "$TAG" origin/main && echo ancestry-ok
+   ```
+   If it fails, the PR was squash- or rebase-merged: the content is right but the next sync will merge from the old base and conflict. Restore it without rewriting history, in a PR that changes no files (merge that one with a merge commit too):
+   ```sh
+   git checkout -b j2/restore-ancestry-"$TAG" origin/main
+   git merge -s ours "$TAG" -m "Record upstream $TAG as merged (restore ancestry)"
+   ```
+9. **Bump the pin** in `~/workspace/claude-plugins` (`j2-health/claude-plugins`): in `.claude-plugin/marketplace.json`, the `mattpocock-skills` entry's `source.sha` → the merge commit on this fork's `main` (full 40 hex), and `version` → `${TAG#v}`, **together**. Open that PR; its CI (`scripts/validate_manifests.py`) checks the shape.
 
 ## Changing the J2 patch without an upstream release
 
